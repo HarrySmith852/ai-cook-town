@@ -99,6 +99,7 @@ Summary: 2 OK · 1 Not OK · 3 Possible · 1 Not Possible
 | `grilling` | [mattpocock/skills](https://github.com/mattpocock/skills) | The interview logic behind `/grill` — stress-tests a plan/spec round by round |
 | `grill-me` | mattpocock/skills | A trigger alias for `grilling`; not model-invoked on its own (`disable-model-invocation: true`) — kept alongside it for compatibility with anything that names it directly |
 | `writing-plans` | this plugin (first-party) | The logic behind `/plan` — always produces a Human Version and a Developer Version, never a single blended document |
+| `frontend-design` | [anthropics/skills](https://github.com/anthropics/skills) | Deliberate visual/UX direction (palette, type, layout, motion, copy) instead of templated defaults. Always invoked by `project-scaffolder` and `action-executor` before any frontend/UI visual decision, however small |
 
 To add more: `npx skills add <repo> --skill <name>` from the project root — it installs into `.agents/skills`, updates `skills-lock.json`, and ships with the plugin on the next release. Only bundle a skill by default if an agent here actually references it by name; otherwise let `find-skills` fetch it on demand when a task calls for it.
 
