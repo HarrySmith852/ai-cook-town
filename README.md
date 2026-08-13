@@ -101,7 +101,7 @@ To add more: `npx skills add <repo> --skill <name>` from the project root — it
 
 ## Hooks
 
-On `SessionStart`, `hooks/check-eslint.js` checks whether the project has a `package.json` (i.e. is a Node project) without `eslint` as a dependency. If so, it surfaces that to Claude, which then **asks before** installing `eslint` as a dev dependency — never silently.
+On `SessionStart` (wired inline in `plugin.json`'s `hooks` field), `hooks/check-eslint.js` checks whether the project has a `package.json` (i.e. is a Node project) without `eslint` as a dependency. If so, it surfaces that to Claude, which then **asks before** installing `eslint` as a dev dependency — never silently.
 
 ## WBS generation
 
@@ -126,8 +126,7 @@ agents/
   action-executor.md            # closes gaps found by /validate, using relevant skills
   wbs-generator.md               # modules/tasks → WBS .xlsx
 hooks/
-  hooks.json                    # SessionStart hook wiring
-  check-eslint.js                # flags missing eslint on Node projects
+  check-eslint.js                # flags missing eslint on Node projects (wired via plugin.json's hooks field)
 scripts/
   generate-wbs.js                # writes the WBS .xlsx (used by wbs-generator)
   package.json                   # generator's own isolated dependency (xlsx-js-style)
