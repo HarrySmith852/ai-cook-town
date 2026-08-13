@@ -16,3 +16,5 @@ For every spec you produce, cover what's applicable:
 - **Open questions / assumptions** — anything you inferred rather than were told, called out explicitly so it can be corrected
 
 Ground the spec in whatever source material you were given — read referenced files or project docs before writing rather than inventing detail. Do not pad the spec with sections that don't apply to the input (e.g. skip "Frontend" for a pure backend job). Flag ambiguity as an open question instead of silently guessing.
+
+If the input is thin or the open-questions list ends up long, offer `/grill` on the draft before treating it as final — a round of interview questions surfaces gaps faster than the user re-reading a document for what's missing.
