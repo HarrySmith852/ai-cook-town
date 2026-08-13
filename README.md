@@ -17,6 +17,7 @@
 - [Installation](#installation)
 - [Usage](#usage)
 - [Bundled skills](#bundled-skills)
+- [Token cost](#token-cost)
 - [Hooks](#hooks)
 - [Project structure](#project-structure)
 - [Development](#development)
@@ -83,25 +84,25 @@ Summary: 2 OK · 1 Not OK · 3 Possible · 1 Not Possible
 
 ## Bundled skills
 
-`plugin.json`'s `skills` field points at `.agents/skills`, so all of the following install automatically with the plugin — nothing extra to run.
+`plugin.json`'s `skills` field points at `.agents/skills`, so all of the following install automatically with the plugin — nothing extra to run. Kept deliberately minimal: only skills actually referenced by name in this plugin's own agents are bundled by default, to keep always-on token cost low (see [Token cost](#token-cost) below). Anything else is discoverable on demand.
 
 | Skill | Source | Used for |
 |---|---|---|
 | `find-skills` | [vercel-labs/skills](https://github.com/vercel-labs/skills) | Discovering and installing other skills on demand (used by `action-executor`) |
-| `brainstorming` | [obra/superpowers](https://github.com/obra/superpowers) | Framing open-ended requests before `/scaffold` or `/spec` |
-| `writing-plans`, `executing-plans` | obra/superpowers | Turning a spec into a stepwise implementation plan and running it |
-| `systematic-debugging` | obra/superpowers | Root-causing bugs and unexpected behavior methodically |
-| `test-driven-development`, `verification-before-completion` | obra/superpowers | Writing tests first; not claiming "done" without proof |
-| `subagent-driven-development`, `dispatching-parallel-agents` | obra/superpowers | Splitting independent work across subagents |
-| `requesting-code-review`, `receiving-code-review` | obra/superpowers | Getting and acting on review feedback |
-| `using-git-worktrees`, `finishing-a-development-branch` | obra/superpowers | Isolating feature work and closing it out cleanly |
-| `writing-skills`, `using-superpowers` | obra/superpowers | Authoring new skills; knowing when to reach for one |
+| `brainstorming` | [obra/superpowers](https://github.com/obra/superpowers) | Framing open-ended requests before `/scaffold` or `/spec` (used by `project-scaffolder`) |
 
-To add more: `npx skills add <repo> --skill <name>` from the project root — it installs into `.agents/skills`, updates `skills-lock.json`, and ships with the plugin on the next release.
+To add more: `npx skills add <repo> --skill <name>` from the project root — it installs into `.agents/skills`, updates `skills-lock.json`, and ships with the plugin on the next release. Only bundle a skill by default if an agent here actually references it by name; otherwise let `find-skills` fetch it on demand when a task calls for it.
+
+## Token cost
+
+Check the live number anytime with `claude plugin details ai-cook-town@ai-cook-town`. As of `0.2.0`: ~791 always-on tokens per session (down from ~1,452 in `0.1.0`, after trimming the bundled-skill list above). On-invoke cost (paid only when a given skill/agent actually fires) is unaffected.
 
 ## Hooks
 
-On `SessionStart` (wired inline in `plugin.json`'s `hooks` field), `hooks/check-eslint.js` checks whether the project has a `package.json` (i.e. is a Node project) without `eslint` as a dependency. If so, it surfaces that to Claude, which then **asks before** installing `eslint` as a dev dependency — never silently.
+Both wired inline in `plugin.json`'s `hooks` field, on `SessionStart`:
+
+- **`hooks/check-eslint.js`** — checks whether the project has a `package.json` (i.e. is a Node project) without `eslint` as a dependency. If so, it surfaces that to Claude, which then **asks before** installing `eslint` as a dev dependency — never silently.
+- **`hooks/auto-update.js`** — once per day at most (throttled via a timestamp file in the OS temp dir, so it doesn't add latency to every session), runs `claude plugin marketplace update` + `claude plugin update` for this plugin. Requires the `claude` CLI on `PATH`; fails silently (never blocks session start) if it's missing, offline, or the update check errors. If an update was applied, it tells Claude to let you know a restart is needed to pick it up.
 
 ## WBS generation
 
@@ -127,6 +128,7 @@ agents/
   wbs-generator.md               # modules/tasks → WBS .xlsx
 hooks/
   check-eslint.js                # flags missing eslint on Node projects (wired via plugin.json's hooks field)
+  auto-update.js                  # daily self-update check via the claude CLI (same wiring)
 scripts/
   generate-wbs.js                # writes the WBS .xlsx (used by wbs-generator)
   package.json                   # generator's own isolated dependency (xlsx-js-style)

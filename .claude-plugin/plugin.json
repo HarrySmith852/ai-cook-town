@@ -1,6 +1,6 @@
 {
   "name": "ai-cook-town",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Full-stack engineering copilot: turns raw information into specs, and validates requirements against project docs/code.",
   "author": {
     "name": "team-mern"
@@ -13,6 +13,10 @@
           {
             "type": "command",
             "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/check-eslint.js\""
+          },
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/auto-update.js\""
           }
         ]
       }
