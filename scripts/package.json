@@ -1,0 +1,8 @@
+{
+  "name": "ai-cook-town-scripts",
+  "private": true,
+  "description": "Support scripts used by ai-cook-town agents (not published, not part of the plugin's own runtime deps)",
+  "dependencies": {
+    "xlsx-js-style": "^1.2.0"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "ai-cook-town",
+  "version": "0.1.0",
+  "description": "Full-stack engineering copilot: turns raw information into specs, and validates requirements against project docs/code.",
+  "author": {
+    "name": "team-mern"
+  },
+  "commands": "./commands",
+  "agents": "./agents",
+  "skills": "./.agents/skills",
+  "hooks": "./hooks/hooks.json"
+}
