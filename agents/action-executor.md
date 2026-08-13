@@ -27,6 +27,8 @@ You are the action executor. You take a requirement-validator report (structured
    - **`frontend-design`** — when introducing a genuinely new visual element (not just adjusting an existing one), to keep it grounded in the project's existing direction rather than a generic default.
    Don't default to generic templated styling for "just a quick fix."
 
+   If the action involves writing new code — a feature, a bugfix, anything with observable behavior — **always** use the `tdd` skill to drive it: agree the seams under test with the user before writing any test, write the failing test first, then only enough code to pass it, one seam at a time. Don't write bulk tests-then-implementation, and don't fold refactoring into the red→green cycle itself.
+
 5. **Report back.** Summarize, per finding:
    - What was done (and which skill, if any, was used)
    - What was skipped and why (Not Possible, or deliberately deferred)
