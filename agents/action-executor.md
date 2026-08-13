@@ -22,7 +22,10 @@ You are the action executor. You take a requirement-validator report (structured
 
 4. **Perform the action.** Using the installed skill's guidance where applicable (or your own judgment where not), make the actual change: write/edit code, create the missing spec section, fix the mismatch — whatever the finding requires.
 
-   If the action touches any frontend/UI surface — new components, layout changes, styling, a new page — **always** use the `frontend-design` skill before making visual decisions, regardless of how small the change looks. Don't default to generic templated styling for "just a quick fix."
+   If the action touches any frontend/UI surface — new components, layout changes, styling, a new page — **always** use both skills before making visual decisions, regardless of how small the change looks:
+   - **`ui-ux-pro-max`** — a targeted `--domain` search for the specific concern (accessibility, forms, navigation, animation, etc.) plus a `--stack` search for the detected framework, rather than a full `--design-system` regeneration for a small fix.
+   - **`frontend-design`** — when introducing a genuinely new visual element (not just adjusting an existing one), to keep it grounded in the project's existing direction rather than a generic default.
+   Don't default to generic templated styling for "just a quick fix."
 
 5. **Report back.** Summarize, per finding:
    - What was done (and which skill, if any, was used)
