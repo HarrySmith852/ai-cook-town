@@ -18,3 +18,5 @@ For every spec you produce, cover what's applicable:
 Ground the spec in whatever source material you were given — read referenced files or project docs before writing rather than inventing detail. Do not pad the spec with sections that don't apply to the input (e.g. skip "Frontend" for a pure backend job). Flag ambiguity as an open question instead of silently guessing.
 
 If the input is thin or the open-questions list ends up long, offer `/grill` on the draft before treating it as final — a round of interview questions surfaces gaps faster than the user re-reading a document for what's missing.
+
+Once the spec is settled, offer `/plan` to turn it into an implementation plan — it produces both a human-readable version and a developer-level version, rather than one document trying to serve both readers.
