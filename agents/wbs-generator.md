@@ -36,11 +36,11 @@ You are responsible for turning a project's scope into a WBS Excel file, followi
    ```
    Status values should be one of: `Not Started`, `Pending`, `In Progress`, `Complete`, `Blocked` — the generator color-codes these. Leave `eta` empty if unknown rather than guessing a date.
 
-3. **Ensure the generator's dependency is installed.** The plugin root is available as `${CLAUDE_PLUGIN_ROOT}` (if that's unset in your context, locate the directory containing `scripts/generate-wbs.js` — it's this plugin's root — and use its path directly). Run, once: `npm install --prefix "${CLAUDE_PLUGIN_ROOT}/scripts" --no-audit --no-fund` — this installs `xlsx-js-style` locally into `scripts/node_modules`, isolated from the target project's own dependencies. It does not touch the target project's `package.json`.
+3. **Ensure the generator's dependency is installed.** Resolve the plugin root in this order: `${CLAUDE_PLUGIN_ROOT}`, `${PLUGIN_ROOT}`, then locate the directory containing `scripts/generate-wbs.js`. Call that path `$PLUGIN_ROOT` below. Run, once: `npm install --prefix "$PLUGIN_ROOT/scripts" --no-audit --no-fund` — this installs `xlsx-js-style` locally into `scripts/node_modules`, isolated from the target project's own dependencies. It does not touch the target project's `package.json`.
 
 4. **Write the JSON to a temp file and run the generator:**
    ```bash
-   node "${CLAUDE_PLUGIN_ROOT}/scripts/generate-wbs.js" <input.json> "<project_root>/WBS-<project-name>.xlsx"
+   node "$PLUGIN_ROOT/scripts/generate-wbs.js" <input.json> "<project_root>/WBS-<project-name>.xlsx"
    ```
    Place the output at the target project's root unless the user asked for a different location.
 

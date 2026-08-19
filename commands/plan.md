@@ -1,4 +1,5 @@
 ---
+name: plan
 description: Turn a spec or requirement into an implementation plan, in both a human and a developer version
 argument-hint: [the spec, requirement, or decision to plan]
 ---

@@ -26,7 +26,23 @@ function writeState(state) {
 }
 
 function run(cmd) {
-  return execSync(cmd, { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
+  return execSync(cmd, {
+    encoding: "utf8",
+    stdio: ["ignore", "pipe", "pipe"],
+    timeout: 15000,
+  });
+}
+
+function emitSessionContext(message) {
+  console.log(
+    JSON.stringify({
+      additional_context: message,
+      hookSpecificOutput: {
+        hookEventName: "SessionStart",
+        additionalContext: message,
+      },
+    })
+  );
 }
 
 const state = readState();
@@ -34,26 +50,20 @@ if (Date.now() - (state.lastCheck || 0) < CHECK_INTERVAL_MS) {
   process.exit(0);
 }
 
-writeState({ ...state, lastCheck: Date.now() });
-
 try {
   run(`claude plugin marketplace update ${MARKETPLACE}`);
   const updateOutput = run(`claude plugin update ${PLUGIN}`);
+  writeState({ ...state, lastCheck: Date.now() });
 
   if (/updated from/i.test(updateOutput)) {
-    console.log(
-      JSON.stringify({
-        hookSpecificOutput: {
-          hookEventName: "SessionStart",
-          additionalContext:
-            "ai-cook-town was just auto-updated to a newer version from its GitHub repo. " +
-            "Tell the user a restart of Claude Code is needed to apply it, and mention what changed if you know.",
-        },
-      })
+    emitSessionContext(
+      "ai-cook-town was just auto-updated to a newer version from its GitHub repo. " +
+        "Tell the user a restart of Claude Code is needed to apply it, and mention what changed if you know."
     );
   }
 } catch {
   // No `claude` CLI on PATH, no network, or the update check failed —
-  // never block session start over this.
+  // never block session start over this. Retry next session rather than
+  // waiting a full day after a transient failure.
   process.exit(0);
 }

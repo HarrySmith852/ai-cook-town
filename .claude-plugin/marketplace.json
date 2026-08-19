@@ -4,7 +4,7 @@
     "name": "HarrySmith852",
     "url": "https://github.com/HarrySmith852/ai-cook-town"
   },
-  "description": "Full-stack engineering copilot for Claude Code: scaffold, spec, validate, act, and generate a project WBS.",
+  "description": "Full-stack engineering copilot for Claude Code and Cursor: scaffold, spec, plan, execute, validate, act, and generate a project WBS.",
   "plugins": [
     {
       "name": "ai-cook-town",

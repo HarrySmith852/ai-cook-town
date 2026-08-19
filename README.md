@@ -1,11 +1,17 @@
 # ai-cook-town
 
-**A [Claude Code](https://code.claude.com) plugin that works like a full-stack software engineer for your project** — scaffold new work, turn ideas into specs, validate requirements against reality, and act on the gaps.
+**A Claude Code and Cursor plugin that works like a full-stack software engineer for your project** — scaffold new work, turn ideas into specs, plan and execute the build, validate requirements against reality, and act on the gaps.
+
+**Claude Code**
 
 ```
 /plugin marketplace add HarrySmith852/ai-cook-town
 /plugin install ai-cook-town
 ```
+
+**Cursor (local)**
+
+Copy or junction this repo to `~/.cursor/plugins/local/ai-cook-town`, then run **Developer: Reload Window**. Confirm it appears under Settings → Plugins. To publish, submit the GitHub repo at [cursor.com/marketplace/publish](https://cursor.com/marketplace/publish).
 
 ---
 
@@ -33,7 +39,8 @@ flowchart LR
     A["/scaffold\nnew project"] --> B["/spec\nraw info → technical spec"]
     B --> G["/grill\nstress-test the draft"]
     G --> P["/plan\nhuman + developer plan"]
-    P --> C["/validate\nrequirements vs. docs/code"]
+    P --> X["/execute\nbuild the plan"]
+    X --> C["/validate\nrequirements vs. docs/code"]
     C --> D["/act\nclose the gaps"]
     B --> W["/wbs\nmodules → WBS .xlsx"]
     C -.->|OK / Not Possible| E["no action needed"]
@@ -49,6 +56,7 @@ Each stage is optional on its own — start wherever fits (e.g. run `/validate` 
 | `/spec` | `spec-writer` | Turns raw input (notes, a conversation, a partial doc, existing code) into a structured full-stack spec — frontend, backend, data model, API, open questions. |
 | `/grill` | `grilling` skill directly | Relentlessly interviews you about a plan, decision, or `/spec` draft — round-by-round, one design-tree frontier at a time — until nothing's left silently assumed. |
 | `/plan` | `writing-plans` skill directly | Turns a spec or requirement into an implementation plan — **always two versions**: a plain-language Human Version (milestones, risk, decisions needed) and a concrete Developer Version (steps, sequencing, testing, technical edge cases). |
+| `/execute` | `plan-executor` | Builds a Developer Version (or any written plan) task by task in an isolated worktree, with a review after each task and a branch finish step at the end. |
 | `/validate` | `requirement-validator` | Checks requirement(s) against the project's actual docs/code. Verdict per requirement: **OK**, **Not OK**, **Possible**, **Not Possible** — each with cited evidence. |
 | `/act` | `action-executor` | Takes a `/validate` report, finds relevant skills for each actionable finding via `find-skills`, installs what fits, and performs the resulting changes. |
 | `/wbs` | `wbs-generator` | Generates a Work Breakdown Structure `.xlsx` for the project — modules → sub-modules → tasks, with Dependencies/Status/ETA columns, color-coded by status. |
@@ -57,12 +65,22 @@ Every command runs its own subagent in an isolated context — the main conversa
 
 ## Installation
 
+### Claude Code
+
 ```
 /plugin marketplace add HarrySmith852/ai-cook-town
 /plugin install ai-cook-town
 ```
 
 For local development, point `marketplace add` at your local checkout path instead of a GitHub repo.
+
+### Cursor
+
+1. Copy or junction this repository to `~/.cursor/plugins/local/ai-cook-town` (Windows: `%USERPROFILE%\.cursor\plugins\local\ai-cook-town`).
+2. Run **Developer: Reload Window**.
+3. Confirm **ai-cook-town** is listed under Settings → Plugins.
+
+The Cursor manifest is `.cursor-plugin/plugin.json`. Skills are loaded from `.agents/skills` (not the default `skills/` folder). Marketplace listing is a separate submit at [cursor.com/marketplace/publish](https://cursor.com/marketplace/publish).
 
 ## Usage
 
@@ -71,6 +89,7 @@ For local development, point `marketplace add` at your local checkout path inste
 /spec Users should be able to reset their password via email
 /grill The password reset spec above
 /plan The password reset spec above
+/execute docs/plans/password-reset.md
 /validate The API must support pagination on the /orders endpoint
 /act <paste the validation report from /validate>
 /wbs Based on the last /spec
@@ -103,19 +122,26 @@ Summary: 2 OK · 1 Not OK · 3 Possible · 1 Not Possible
 | `ui-ux-pro-max` | [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) | The structured layer: a local, stdlib-only Python search tool over curated palettes/typography/UX rules/stack-specific implementation/accessibility checklists. `project-scaffolder` runs its `--design-system` search for new projects/pages; `action-executor` runs targeted `--domain`/`--stack` searches for smaller fixes. Used alongside `frontend-design`, not instead of it — reviewed for network/exec/eval calls before bundling despite an automated "High Risk" scan tag (false positive: the tag reacts to bundled executable scripts, not anything the code does) |
 | `tdd` | [mattpocock/skills](https://github.com/mattpocock/skills) | Red→green test-first discipline: agree seams with the user before writing a test, one seam/test/minimal-implementation per cycle, no bulk tests-then-implementation. Always invoked by `action-executor` when an actionable finding involves writing new code with observable behavior |
 | `requesting-code-review` | [obra/superpowers](https://github.com/obra/superpowers) | Dispatches a fresh `general-purpose` subagent (precisely-scoped context, never the session history) to review a diff against its requirements before declaring done. Always invoked by `action-executor` after any code change, before its final report |
+| `subagent-driven-development` | obra/superpowers | Fresh implementer subagent per plan task, then a task review — used by `plan-executor` |
+| `using-git-worktrees` | obra/superpowers | Isolates `/execute` work off `main`/`master` |
+| `systematic-debugging` | obra/superpowers | Root-cause first when a plan task hits a bug or test failure |
+| `verification-before-completion` | obra/superpowers | Re-run the real verification command before marking a task done |
+| `receiving-code-review` | obra/superpowers | How `plan-executor` treats reviewer feedback (verify, push back if wrong) |
+| `finishing-a-development-branch` | obra/superpowers | Test suite + integration options (PR/merge) after `/execute` |
+| `executing-plans` | obra/superpowers | Fallback when subagents are not the right execution mode |
 
 To add more: `npx skills add <repo> --skill <name>` from the project root — it installs into `.agents/skills`, updates `skills-lock.json`, and ships with the plugin on the next release. Only bundle a skill by default if an agent here actually references it by name; otherwise let `find-skills` fetch it on demand when a task calls for it.
 
 ## Token cost
 
-Check the live number anytime with `claude plugin details ai-cook-town@ai-cook-town`. As of `0.2.0`: ~791 always-on tokens per session (down from ~1,452 in `0.1.0`, after trimming the bundled-skill list above). On-invoke cost (paid only when a given skill/agent actually fires) is unaffected.
+Check the live number anytime with `claude plugin details ai-cook-town@ai-cook-town`. The `0.2.0` trim brought always-on cost down to ~791 tokens; later skill adds (UI, TDD, review, and `/execute` process skills) raised it again. Re-measure after each bundle change — do not treat the `0.2.0` number as current. On-invoke cost (paid only when a given skill/agent actually fires) is separate from always-on descriptions.
 
 ## Hooks
 
-Both wired inline in `plugin.json`'s `hooks` field, on `SessionStart`:
+Wired in `.claude-plugin/plugin.json` (Claude) and `hooks/hooks.json` (Cursor + Claude file discovery):
 
-- **`hooks/check-eslint.js`** — checks whether the project has a `package.json` (i.e. is a Node project) without `eslint` as a dependency. If so, it surfaces that to Claude, which then **asks before** installing `eslint` as a dev dependency — never silently.
-- **`hooks/auto-update.js`** — once per day at most (throttled via a timestamp file in the OS temp dir, so it doesn't add latency to every session), runs `claude plugin marketplace update` + `claude plugin update` for this plugin. Requires the `claude` CLI on `PATH`; fails silently (never blocks session start) if it's missing, offline, or the update check errors. If an update was applied, it tells Claude to let you know a restart is needed to pick it up.
+- **`hooks/check-eslint.js`** — checks whether the project has a `package.json` without eslint (or biome) already configured. If so, it surfaces that to the agent, which then **asks before** installing `eslint` as a dev dependency — never silently. Emits both Claude (`hookSpecificOutput.additionalContext`) and Cursor (`additional_context`) session-start payloads.
+- **`hooks/auto-update.js`** — Claude Code only. Once per day at most (throttled via a timestamp file in the OS temp dir), runs `claude plugin marketplace update` + `claude plugin update`. Requires the `claude` CLI on `PATH`; fails silently (never blocks session start) if it's missing, offline, or the update check errors. Cursor installs update through Cursor's plugin machinery, not this hook.
 
 ## WBS generation
 
@@ -125,25 +151,32 @@ Both wired inline in `plugin.json`'s `hooks` field, on `SessionStart`:
 
 ```
 .claude-plugin/
-  plugin.json                  # plugin manifest
+  plugin.json                  # Claude Code plugin manifest
   marketplace.json              # makes this repo installable via /plugin marketplace add
+.cursor-plugin/
+  plugin.json                  # Cursor plugin manifest
 commands/
   scaffold.md                   # /scaffold → project-scaffolder
   spec.md                       # /spec     → spec-writer
   grill.md                       # /grill    → grilling skill
   plan.md                        # /plan     → writing-plans skill
+  execute.md                    # /execute  → plan-executor
   validate.md                   # /validate → requirement-validator
   act.md                        # /act      → action-executor
   wbs.md                         # /wbs      → wbs-generator
 agents/
   project-scaffolder.md         # new project structure + baseline tooling
   spec-writer.md                # raw input → full-stack spec
+  plan-executor.md              # Developer Version → reviewed implementation
   requirement-validator.md      # requirements vs. docs/code, with verdicts
   action-executor.md            # closes gaps found by /validate, using relevant skills
   wbs-generator.md               # modules/tasks → WBS .xlsx
 hooks/
-  check-eslint.js                # flags missing eslint on Node projects (wired via plugin.json's hooks field)
-  auto-update.js                  # daily self-update check via the claude CLI (same wiring)
+  hooks.json                     # Cursor + Claude file-based hook wiring
+  check-eslint.js                # flags missing eslint on Node projects
+  auto-update.js                  # daily self-update check via the claude CLI
+assets/
+  logo.svg                       # marketplace logo
 scripts/
   generate-wbs.js                # writes the WBS .xlsx (used by wbs-generator)
   package.json                   # generator's own isolated dependency (xlsx-js-style)
@@ -153,8 +186,8 @@ skills-lock.json                 # pins bundled skill sources/versions
 
 ## Development
 
-Edit the files above directly, then reload the plugin in Claude Code to pick up changes.
+Edit the files above directly, then reload the plugin (Claude Code plugin reload, or Cursor **Developer: Reload Window**) to pick up changes.
 
-- Commands are prompt templates in `commands/*.md` — front matter takes `description` and `argument-hint`; `$ARGUMENTS` is replaced with whatever follows the slash command.
+- Commands are prompt templates in `commands/*.md` — front matter takes `name`, `description`, and `argument-hint`; `$ARGUMENTS` is replaced with whatever follows the slash command.
 - Agents are subagent definitions in `agents/*.md` — front matter takes `name`, `description` (used for auto-delegation matching), and `tools`.
-- See the [Claude Code plugin docs](https://code.claude.com/docs/en/plugins) for the full manifest schema and hook event reference.
+- See the [Claude Code plugin docs](https://code.claude.com/docs/en/plugins) and the [Cursor plugin docs](https://cursor.com/docs/reference/plugins) for manifest schema and hook event reference.

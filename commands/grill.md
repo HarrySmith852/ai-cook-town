@@ -1,4 +1,5 @@
 ---
+name: grill
 description: Run a relentless interview to stress-test a plan, spec, or decision before committing to it
 argument-hint: [the plan, decision, or /spec output to grill]
 ---
