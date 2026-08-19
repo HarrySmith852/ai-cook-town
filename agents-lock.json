@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "agents": {
+    "backend-developer": {
+      "source": "VoltAgent/awesome-claude-code-subagents",
+      "sourceType": "github",
+      "agentPath": "categories/01-core-development/backend-developer.md",
+      "computedHash": "f41444c6a10a4d57821a9eda26018bf94d92249c5da383e93ebbee08b6c051c3"
+    },
+    "frontend-developer": {
+      "source": "VoltAgent/awesome-claude-code-subagents",
+      "sourceType": "github",
+      "agentPath": "categories/01-core-development/frontend-developer.md",
+      "computedHash": "f0d9e9c05f3ed75afa6d72dce6803d59eb0410c8af01e74ef1c9931dc21ec122"
+    },
+    "fullstack-developer": {
+      "source": "VoltAgent/awesome-claude-code-subagents",
+      "sourceType": "github",
+      "agentPath": "categories/01-core-development/fullstack-developer.md",
+      "computedHash": "cd1f0df98b1ccc0e78540d777505736a5f0af619609476c19115abd65b3463f8"
+    },
+    "code-reviewer": {
+      "source": "VoltAgent/awesome-claude-code-subagents",
+      "sourceType": "github",
+      "agentPath": "categories/04-quality-security/code-reviewer.md",
+      "computedHash": "cf8235884dd8b4bc15aa20cc822f727ecbde2b65823b7ba2b027a638804dfc78"
+    },
+    "debugger": {
+      "source": "VoltAgent/awesome-claude-code-subagents",
+      "sourceType": "github",
+      "agentPath": "categories/04-quality-security/debugger.md",
+      "computedHash": "7e39938967cb1313f803a603e215ad0d8c778e0913328ccee220bb8470d617f3"
+    },
+    "security-auditor": {
+      "source": "VoltAgent/awesome-claude-code-subagents",
+      "sourceType": "github",
+      "agentPath": "categories/04-quality-security/security-auditor.md",
+      "computedHash": "62b0e511c9e0d8f1ec02b2fe0f4a1806134c850508c55420f558457225b1eb7d"
+    },
+    "test-automator": {
+      "source": "VoltAgent/awesome-claude-code-subagents",
+      "sourceType": "github",
+      "agentPath": "categories/04-quality-security/test-automator.md",
+      "computedHash": "811f2e71b5f74f1f0780da4b657737df056ef07eec2dd85b2492d1d58edd5dba"
+    },
+    "performance-engineer": {
+      "source": "VoltAgent/awesome-claude-code-subagents",
+      "sourceType": "github",
+      "agentPath": "categories/04-quality-security/performance-engineer.md",
+      "computedHash": "3f3f6ac069818a21fbd106ce7d2d374fb32342dc1197a8148bc6f9ae8fdde277"
+    },
+    "refactoring-specialist": {
+      "source": "VoltAgent/awesome-claude-code-subagents",
+      "sourceType": "github",
+      "agentPath": "categories/06-developer-experience/refactoring-specialist.md",
+      "computedHash": "25f431ff0e8f6c219a0b1b60e46f226d82f26e29f286420dd8d11da80f802ff4"
+    }
+  }
+}

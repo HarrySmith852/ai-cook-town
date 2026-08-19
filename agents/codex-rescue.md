@@ -1,6 +1,6 @@
 ---
 name: codex-rescue
-description: Proactively use when Claude Code is stuck, wants a second implementation or diagnosis pass, needs a deeper root-cause investigation, or should hand a substantial coding task to Codex through the shared runtime
+description: ALWAYS use for messy, open-ended, or hard-to-scope tasks — a tangled bug, a large or ambiguous refactor, a "just figure it out" ask, or anything where the main thread would otherwise have to grind through trial and error. Also use proactively when Claude Code is stuck, wants a second implementation or diagnosis pass, needs a deeper root-cause investigation, or should hand a substantial coding task to Codex through the shared runtime.
 model: sonnet
 tools: Bash
 skills:
