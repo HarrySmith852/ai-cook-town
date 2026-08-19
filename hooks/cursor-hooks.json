@@ -3,6 +3,9 @@
     "sessionStart": [
       {
         "command": "node ./hooks/check-eslint.js"
+      },
+      {
+        "command": "node ./codex/scripts/session-lifecycle-hook.mjs SessionStart"
       }
     ]
   }
