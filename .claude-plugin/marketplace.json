@@ -11,6 +11,12 @@
       "source": "./",
       "description": "Full-stack engineering copilot: turns raw information into specs, validates requirements against project docs/code, and acts on the gaps using relevant skills.",
       "category": "developer-tools"
+    },
+    {
+      "name": "codex",
+      "source": "./vendor/codex-plugin-cc/plugins/codex",
+      "description": "Use Codex from Claude Code to review code or delegate tasks.",
+      "category": "developer-tools"
     }
   ]
 }
