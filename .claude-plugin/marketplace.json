@@ -9,7 +9,8 @@
     {
       "name": "ai-cook-town",
       "source": "./",
-      "description": "Full-stack engineering copilot: turns raw information into specs, validates requirements against project docs/code, and acts on the gaps using relevant skills."
+      "description": "Full-stack engineering copilot: turns raw information into specs, validates requirements against project docs/code, and acts on the gaps using relevant skills.",
+      "category": "developer-tools"
     }
   ]
 }

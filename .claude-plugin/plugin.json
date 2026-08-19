@@ -18,11 +18,7 @@
     "tdd",
     "code-review"
   ],
-  "category": "developer-tools",
-  "logo": "assets/logo.svg",
   "skills": "./.agents/skills",
-  "agents": "./agents",
-  "commands": "./commands",
   "hooks": {
     "SessionStart": [
       {
