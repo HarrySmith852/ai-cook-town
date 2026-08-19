@@ -23,5 +23,5 @@
   "skills": "./.agents/skills",
   "agents": "./agents",
   "commands": "./commands",
-  "hooks": "./hooks/hooks.json"
+  "hooks": "./hooks/cursor-hooks.json"
 }

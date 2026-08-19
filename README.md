@@ -138,7 +138,7 @@ Check the live number anytime with `claude plugin details ai-cook-town@ai-cook-t
 
 ## Hooks
 
-Wired in `.claude-plugin/plugin.json` (Claude) and `hooks/hooks.json` (Cursor + Claude file discovery):
+Wired in `.claude-plugin/plugin.json`'s `hooks` field (Claude) and `hooks/cursor-hooks.json` (Cursor, referenced from `.cursor-plugin/plugin.json`) — separate files because the two hosts use incompatible event-key casing and hook-entry shapes:
 
 - **`hooks/check-eslint.js`** — checks whether the project has a `package.json` without eslint (or biome) already configured. If so, it surfaces that to the agent, which then **asks before** installing `eslint` as a dev dependency — never silently. Emits both Claude (`hookSpecificOutput.additionalContext`) and Cursor (`additional_context`) session-start payloads.
 - **`hooks/auto-update.js`** — Claude Code only. Once per day at most (throttled via a timestamp file in the OS temp dir), runs `claude plugin marketplace update` + `claude plugin update`. Requires the `claude` CLI on `PATH`; fails silently (never blocks session start) if it's missing, offline, or the update check errors. Cursor installs update through Cursor's plugin machinery, not this hook.
@@ -172,7 +172,7 @@ agents/
   action-executor.md            # closes gaps found by /validate, using relevant skills
   wbs-generator.md               # modules/tasks → WBS .xlsx
 hooks/
-  hooks.json                     # Cursor + Claude file-based hook wiring
+  cursor-hooks.json               # Cursor-only hook wiring (Claude uses plugin.json's inline `hooks` field)
   check-eslint.js                # flags missing eslint on Node projects
   auto-update.js                  # daily self-update check via the claude CLI
 assets/
