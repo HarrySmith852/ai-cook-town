@@ -1,3 +1,12 @@
 [submodule "vendor/codex-plugin-cc"]
 	path = vendor/codex-plugin-cc
 	url = https://github.com/openai/codex-plugin-cc.git
+[submodule "vendor/claude-mem"]
+	path = vendor/claude-mem
+	url = https://github.com/thedotmack/claude-mem.git
+[submodule "vendor/understand-anything"]
+	path = vendor/understand-anything
+	url = https://github.com/Egonex-AI/Understand-Anything.git
+[submodule "vendor/oh-my-claudecode"]
+	path = vendor/oh-my-claudecode
+	url = https://github.com/Yeachan-Heo/oh-my-claudecode.git

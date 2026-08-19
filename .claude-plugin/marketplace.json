@@ -17,6 +17,24 @@
       "source": "./vendor/codex-plugin-cc/plugins/codex",
       "description": "Use Codex from Claude Code to review code or delegate tasks.",
       "category": "developer-tools"
+    },
+    {
+      "name": "claude-mem",
+      "source": "./vendor/claude-mem/plugin",
+      "description": "Persistent memory system for Claude Code - context compression across sessions.",
+      "category": "developer-tools"
+    },
+    {
+      "name": "understand-anything",
+      "source": "./vendor/understand-anything/understand-anything-plugin",
+      "description": "AI-powered codebase understanding - analyze, visualize, and explain any project as an interactive knowledge graph.",
+      "category": "developer-tools"
+    },
+    {
+      "name": "oh-my-claudecode",
+      "source": "./vendor/oh-my-claudecode",
+      "description": "Teams-first multi-agent orchestration for Claude Code - intelligent model routing, agents, and skills.",
+      "category": "productivity"
     }
   ]
 }

@@ -1,7 +1,7 @@
 {
   "name": "ai-cook-town",
   "displayName": "ai-cook-town",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "description": "Full-stack engineering copilot: scaffold, spec, grill, plan, execute, validate, act, and generate a project WBS.",
   "author": {
     "name": "team-mern"
